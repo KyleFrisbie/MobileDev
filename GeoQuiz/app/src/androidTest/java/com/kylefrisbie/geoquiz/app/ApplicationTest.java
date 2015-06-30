@@ -1,4 +1,4 @@
-package com.kylefrisbie.geoquiz;
+package com.kylefrisbie.geoquiz.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
