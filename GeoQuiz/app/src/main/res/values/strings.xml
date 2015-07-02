@@ -12,8 +12,9 @@
         freshwater lake.</string>
     <string name="true_button">True</string>
     <string name="false_button">False</string>
-    <string name="correct_toast">Yay you are hot!</string>
-    <string name="incorrect_toast">Sad you are wrong :(</string>
     <string name="next_button">Next</string>
+    <string name="previous_button">Previous</string>
+    <string name="correct_toast">Correct!</string>
+    <string name="incorrect_toast">Incorrect..</string>
     <string name="action_settings">Settings</string>
 </resources>

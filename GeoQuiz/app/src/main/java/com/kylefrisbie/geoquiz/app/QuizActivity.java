@@ -2,6 +2,7 @@ package com.kylefrisbie.geoquiz.app;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,9 +13,10 @@ import android.widget.Toast;
 
 public class QuizActivity extends Activity {
 
-    private Button mTrueButton;
-    private Button mFalseButton;
-    private Button mNextButton;
+    private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX = "index";
+
+    private Button mTrueButton, mFalseButton, mNextButton, mPreviousButton;
     private TextView mQuestionTextView;
 
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
@@ -54,6 +56,16 @@ public class QuizActivity extends Activity {
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         updateQuestion();
 
+        mQuestionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(QuizActivity.this,
+                        mQuestionBank[(mCurrentIndex + 1) %
+                                mQuestionBank.length].getmQuestion(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +81,8 @@ public class QuizActivity extends Activity {
                 checkAnswer(false);
             }
         });
-        
-        mNextButton = (Button)findViewById(R.id.next_button);
+
+        mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +90,39 @@ public class QuizActivity extends Activity {
                 updateQuestion();
             }
         });
+
+        mPreviousButton = (Button) findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurrentIndex == 0) {
+                    mCurrentIndex = mQuestionBank.length - 1;
+                } else {
+                    mCurrentIndex--;
+                }
+
+                mCurrentIndex =
+                        (mCurrentIndex == 0)
+                                ? mQuestionBank.length - 1
+                                : mCurrentIndex - 1;
+
+                updateQuestion();
+            }
+        });
+
+        if(savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        }
+
+        updateQuestion();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSaveInstanceState");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
